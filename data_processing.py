@@ -215,4 +215,5 @@ def word_read(docx_path):  # 读取docx文档
 
 
 if __name__ == '__main__':
-    txt_process('1', '2')
+    # txt_process('1', '2')
+    doc_to_docx(word_name, save_file)
