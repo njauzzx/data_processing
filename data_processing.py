@@ -7,6 +7,7 @@ import sqlalchemy as sql
 from win32com import client
 import docx
 from tqdm import tqdm
+from collections import Counter
 
 def integrate(folder, all_txt):  # 将文件夹中txt合并
     name_list = os.listdir(folder)
@@ -215,7 +216,7 @@ def word_read(docx_path):  # 读取docx文档
     docx_text = docx.Document(docx_path)
 
 
-def vocab_extend(vocab1,vocab2):  # 针对两个词表的词表内容扩充，将vocab2词表内容添加到vocab1词表
+def vocab_extend1(vocab1,vocab2):  # 针对两个词表的词表内容扩充，将vocab2词表内容添加到vocab1词表
     with open(vocab1,'r',encoding='utf-8')as v1:
         v1_list = v1.readlines()
 
@@ -227,7 +228,27 @@ def vocab_extend(vocab1,vocab2):  # 针对两个词表的词表内容扩充，�
             else:
                 v2.write(line)
 
+
+def vocab_extend2(txt,vocab):  # 针对数据和词表的词表内容扩充，将数据中的高频词添加到词表中
+    with open(txt,'r',encoding='utf-8')as t:
+        t_content = t.read()
+        # t_list = t.read().split()  # 英文
+        t_list = list(Counter(t_content).keys())
+        t_list.remove('\n')
+        t_list.remove(' ')
+    with open(vocab,'r+',encoding='utf-8')as v:
+        v_list = v.readlines()
+        i = 0
+        for item in t_list:
+            if item + '\n' in v_list:
+                continue
+            else:
+                i += 1
+                v.write(item + '\n')
+    print('扩充词表数量：{}'.format(i))
+
 if __name__ == '__main__':
     # txt_process('1', '2')
     # doc_to_docx(word_name, save_file)
-    vocab_extend('siku_vocab.txt', 'vocab.txt')
+    # vocab_extend1('siku_vocab.txt', 'vocab.txt')
+    vocab_extend2('2.txt', '1.txt')
