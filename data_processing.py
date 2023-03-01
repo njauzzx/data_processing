@@ -6,6 +6,7 @@ import string
 import sqlalchemy as sql
 from win32com import client
 import docx
+from tqdm import tqdm
 
 def integrate(folder, all_txt):  # 将文件夹中txt合并
     name_list = os.listdir(folder)
@@ -214,6 +215,19 @@ def word_read(docx_path):  # 读取docx文档
     docx_text = docx.Document(docx_path)
 
 
+def vocab_extend(vocab1,vocab2):  # 针对两个词表的词表内容扩充，将vocab2词表内容添加到vocab1词表
+    with open(vocab1,'r',encoding='utf-8')as v1:
+        v1_list = v1.readlines()
+
+    with open(vocab2,'r+',encoding='utf-8')as v2:
+        v2_list = v2.readlines()
+        for line in v1_list:
+            if line in v2_list:
+                continue
+            else:
+                v2.write(line)
+
 if __name__ == '__main__':
     # txt_process('1', '2')
-    doc_to_docx(word_name, save_file)
+    # doc_to_docx(word_name, save_file)
+    vocab_extend('siku_vocab.txt', 'vocab.txt')
